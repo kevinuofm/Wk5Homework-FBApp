@@ -8,20 +8,63 @@
 
 import UIKit
 
-class PhotoViewController: UIViewController {
+class PhotoViewController: UIViewController, UIScrollViewDelegate {
     
     var image: UIImage!
     
     @IBOutlet weak var imageView: UIImageView!
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        scrollView.contentSize = imageView.image!.size
+
         imageView.image = image
+        
+        scrollView.delegate = self
+        
+        
+        
         
         //print("the photo name is ", imageView)
         // Do any additional setup after loading the view.
     }
+    
+    
+    @IBAction func didPan(sender: UIPanGestureRecognizer) {
+        
+        var point = sender.locationInView(view)
+        var velocity = sender.velocityInView(view)
+        var translation = sender.translationInView(view)
+        var imageOriginalCenter: CGPoint!
+        imageOriginalCenter = imageView.center
+
+     if sender.state == UIGestureRecognizerState.Began {
+        
+           // imageOriginalCenter = imageView.center
+        
+        } else if sender.state == UIGestureRecognizerState.Changed {
+        
+            imageView.center = CGPoint(x: imageOriginalCenter.x, y: imageOriginalCenter.y + translation.y)
+        
+        print("translation is at", translation.y)
+   
+        
+        } else if sender.state == UIGestureRecognizerState.Ended {
+        
+        if translation.y > 100 {
+            dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+            print("Gesture ended at: \(point)")
+        }
+
+    
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

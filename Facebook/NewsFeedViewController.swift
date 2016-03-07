@@ -11,9 +11,14 @@ import UIKit
 class NewsFeedViewController: UIViewController {
 
     var selectedImageView: UIImageView!
+    var imageTransition: ImageTransition!
+    var fadeTransition: FadeTransition!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var feedImageView: UIImageView!
+    
+    
+    
     @IBAction func didPressPhoto(sender: UITapGestureRecognizer) {
         //sets the thing you tapped on to selected ImageView.
 
@@ -31,6 +36,9 @@ class NewsFeedViewController: UIViewController {
 
         // Configure the content size of the scroll view
         scrollView.contentSize = CGSizeMake(320, feedImageView.image!.size.height)
+        
+        imageTransition = ImageTransition()
+        //fadeTransition = FadeTransition()
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,7 +60,13 @@ class NewsFeedViewController: UIViewController {
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         let photoViewController = segue.destinationViewController as! PhotoViewController
+        
+        photoViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        
+        photoViewController.transitioningDelegate = imageTransition
+        
         
         photoViewController.view.layoutIfNeeded()
         
